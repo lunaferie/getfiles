@@ -1,6 +1,7 @@
 #!/usr/bin/python
-# v3.0
+# v3.1
 # history of changes:
+#	v3.1 - add single link from cli: -l parametr
 #	v3.0 - remove automatic extension and add parametrs from command line
 # 	v2.3 - add extensions to downloaded files and comments in script
 #
@@ -14,7 +15,7 @@ import getopt
 files = []
 
 try:
-    shortargs = "n:a:"
+    shortargs = "n:a:l:"
     longargs = ['help']
     options, args = getopt.gnu_getopt(sys.argv[1:], shortargs, longargs)
 except getopt.GetoptError as err:
@@ -22,16 +23,22 @@ except getopt.GetoptError as err:
     print 'use --help'
     sys.exit(2)
 
-
 for chose, value in options:
     if chose == '-n':
         outfile = value
+
     if chose == '-a':
         with open(value, 'r') as links:
 	    files = links.readlines()
+
+    if chose == '-l':
+	x = value
+	files.append(value)
+
     if chose == '--help':
         print "-n	enter name for downloaded files"
 	print "-a	add links from file"
+	print "-l	add single link from cli"
 	files.append('1')
 
 if not files:
