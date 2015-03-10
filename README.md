@@ -6,4 +6,5 @@ don`t support links with capcha code
 to do in future:
   - download speed 
   - web interface
-  - handle errors when link is broken
+  - handling errors when link is broken
+  - maybe captcha code support (I don`t use such links)
