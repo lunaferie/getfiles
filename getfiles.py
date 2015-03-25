@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 # by lunaferie
-# v_3.2
+# v_4.0
 ################################################
  
 import urllib
@@ -12,7 +12,7 @@ import getopt
 files = []
 
 try:
-    shortargs = "n:a:l:"
+    shortargs = "a:l:"
     longargs = ['help']
     options, args = getopt.gnu_getopt(sys.argv[1:], shortargs, longargs)
 except getopt.GetoptError as err:
@@ -21,9 +21,6 @@ except getopt.GetoptError as err:
     sys.exit(2)
 
 for chose, value in options:
-    if chose == '-n':
-        outfile = value
-
     if chose == '-a':
         with open(value, 'r') as links:
 	    files = links.readlines()
@@ -33,7 +30,6 @@ for chose, value in options:
 	files.append(value)
 
     if chose == '--help':
-        print "-n	define name for downloaded files"
 	print "-a	add links from file"
 	print "-l	add single link from cli"
 	files.append('1')
@@ -59,50 +55,27 @@ def getf(getFile, saveFile):
     sys.stdout.write("\rDownload complete, saved as: " + '\n\n')
     sys.stdout.flush()
 
-# check length of files list and increment +1 (because counter=1)
-counter=1
-counter=int(counter)
-lenght = len(files) + 1
-
-# existing file name and check whether a output exists, else add default name
-if 'outfile' in locals():
-    print "-------------------------\n"
-    fileexist="%s.part%d" % (outfile, counter)
-else:
-    for name in files:
-	outfile = name.split('/')[-1].strip()
-    fileexist="%s.part%d" % (outfile, counter)
+# add default name
+for name in files:
+    outfile = name.split('/')[-1].strip()
 
 # call getf function, to download files from files LIST
 for getFile in files:
     getf(getFile, outfile)
-
-# while file name exist in our path, increment name +1 (our+file.part+1)
-    while os.path.exists(fileexist) == True:
-	counter+=1
-	lenght+=1
-	fileexist="%s.part%d" % (outfile, counter)
-
-# if link to download in file LIST > 1 (counter=1) then: 
-# change name and add extension to file, get downloaded file size in KB, MB or GB and print that
-
-    if lenght > counter:
-        os.system('mv %s %s.part%d' % (outfile, outfile, counter))
-        file = '%s.part%d' % (outfile, counter)
-	print file
-	filesize = os.path.getsize(file)
-	total = (filesize/1024)/1024
+    print outfile
+    filesize = os.path.getsize(outfile)
+    total = (filesize/1024)/1024
 	
-	if total <= 0:
-	    total = (filesize/1024)
-	    print "Size: %d KB" % total
+    if total <= 0:
+	total = (filesize/1024)
+        print "Size: %d KB" % total
 	
-	elif total > 1024:
-	    total = float((filesize/1024)/1024)/1024
-	    print "Size: %d GB" % total
+    elif total > 1024:
+	total = float((filesize/1024)/1024)/1024
+	print "Size: %d GB" % total
 	
-	else:
-	    print "Size: %d MB" % total	
+    else:
+	print "Size: %d MB" % total	
 	
-	print "-------------------------\n"
+    print "-------------------------\n"
 
