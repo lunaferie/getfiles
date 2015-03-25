@@ -1,10 +1,7 @@
 #!/usr/bin/python
-# v3.1
-# history of changes:
-#	v3.1 - add single link from cli: -l parametr
-#	v3.0 - remove automatic extension and add parametrs from command line
-# 	v2.3 - add extensions to downloaded files and comments in script
 #
+# by lunaferie
+# v_3.2
 ################################################
  
 import urllib
@@ -36,7 +33,7 @@ for chose, value in options:
 	files.append(value)
 
     if chose == '--help':
-        print "-n	enter name for downloaded files"
+        print "-n	define name for downloaded files"
 	print "-a	add links from file"
 	print "-l	add single link from cli"
 	files.append('1')
@@ -48,8 +45,6 @@ if not files:
 
 elif files == ['1']:
     sys.exit(4)
-
-print "-------------------------\n"
 
 # Percent progres function (blockSize and totalSize are the data get from url)
 def progres(count, blockSize, totalSize):
@@ -69,8 +64,14 @@ counter=1
 counter=int(counter)
 lenght = len(files) + 1
 
-# existing file name
-fileexist="%s.part%d" % (outfile, counter)
+# existing file name and check whether a output exists, else add default name
+if 'outfile' in locals():
+    print "-------------------------\n"
+    fileexist="%s.part%d" % (outfile, counter)
+else:
+    for name in files:
+	outfile = name.split('/')[-1].strip()
+    fileexist="%s.part%d" % (outfile, counter)
 
 # call getf function, to download files from files LIST
 for getFile in files:
